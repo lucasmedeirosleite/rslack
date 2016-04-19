@@ -1,5 +1,5 @@
 require 'rslack/version'
+require 'rslack/configuration'
 
 module RSlack
-  # Your code goes here...
 end

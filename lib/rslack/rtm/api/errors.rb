@@ -1,0 +1,14 @@
+module RSlack
+  module RTM
+    module API
+
+      class APIError < RuntimeError; end
+      class MigrationInProgressError < APIError; end
+      class NotAuthenticatedError < APIError; end
+      class InvalidAuthError < APIError; end
+      class AccountInactiveError < APIError; end
+      class InvalidCharsetError < APIError; end
+
+    end
+  end
+end

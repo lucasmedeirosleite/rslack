@@ -1,0 +1,79 @@
+require 'spec_helper'
+
+describe RSlack::RTM::API do
+  class Dummy
+    include RSlack::RTM::API
+  end
+
+  subject(:api) { Dummy.new }
+
+  it { expect(api).to respond_to(:start) }
+
+  describe '#start' do
+    context 'when RTM does not start properly' do
+      let(:token) { 'a-token' }
+      let(:api_url) { 'http://some.url.com' }
+      let(:configuration) { double }
+
+      shared_examples 'an erronious request' do
+        let(:body) { "{\"ok\":false,\"error\":\"#{event}\"}" }
+        let(:response) { double }
+
+        before do
+          allow(RSlack::Configuration).to receive(:current).and_return(configuration)
+          allow(configuration).to receive(:token).and_return(token)
+          allow(configuration).to receive(:api_url).and_return(api_url)
+          expect(RestClient).to receive(:get).with("#{api_url}/rtm.start?token=#{token}").and_return(response)
+          allow(response).to receive(:body).and_return(body)
+        end
+
+        it 'warns with desired error' do
+          expect{
+            api.start
+          }.to raise_error expected_error
+        end
+      end
+
+      context 'when an http error occurred' do
+        xit 'warns that start call failed'
+      end
+
+      context 'when migration_in_progress' do
+        let(:event) { 'migration_in_progress' }
+        let(:expected_error) { RSlack::RTM::API::MigrationInProgressError }
+
+        it_behaves_like 'an erronious request'
+      end
+
+      context 'when not_authed' do
+        let(:event) { 'not_authed' }
+        let(:expected_error) { RSlack::RTM::API::NotAuthenticatedError }
+
+        it_behaves_like 'an erronious request'
+      end
+
+      context 'invalid_auth' do
+        let(:event) { 'invalid_auth' }
+        let(:expected_error) { RSlack::RTM::API::InvalidAuthError }
+
+        it_behaves_like 'an erronious request'
+      end
+
+      context 'account_inactive' do
+        let(:event) { 'account_inactive' }
+        let(:expected_error) { RSlack::RTM::API::AccountInactiveError }
+
+        it_behaves_like 'an erronious request'
+      end
+
+      context 'invalid_charset' do
+        let(:event) { 'invalid_charset' }
+        let(:expected_error) { RSlack::RTM::API::InvalidCharsetError }
+
+        it_behaves_like 'an erronious request'
+      end
+    end
+
+    context 'when RTM starts property'
+  end
+end

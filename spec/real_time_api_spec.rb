@@ -10,17 +10,17 @@ describe RSlack::RTM::API do
   it { expect(api).to respond_to(:start) }
 
   describe '#start' do
+    let(:token) { 'a-token' }
+    let(:api_url) { 'http://some.url.com' }
+    let(:configuration) { double }
+
+    before do
+      allow(RSlack::Configuration).to receive(:current).and_return(configuration)
+      allow(configuration).to receive(:token).and_return(token)
+      allow(configuration).to receive(:api_url).and_return(api_url)
+    end
+
     context 'when RTM does not start properly' do
-      let(:token) { 'a-token' }
-      let(:api_url) { 'http://some.url.com' }
-      let(:configuration) { double }
-
-      before do
-        allow(RSlack::Configuration).to receive(:current).and_return(configuration)
-        allow(configuration).to receive(:token).and_return(token)
-        allow(configuration).to receive(:api_url).and_return(api_url)
-      end
-
       shared_examples 'an erronious request' do
         let(:body) { "{\"ok\":false,\"error\":\"#{event}\"}" }
         let(:response) { double }
@@ -85,6 +85,19 @@ describe RSlack::RTM::API do
       end
     end
 
-    context 'when RTM starts property'
+    context 'when RTM starts property' do
+      let(:url) { "wss:\/\/my-socket-url.com" }
+      let(:body) { "{\"ok\":true,\"url\":\"#{url}\"}" }
+      let(:response) { double }
+
+      before do
+        expect(RestClient).to receive(:get).with("#{api_url}/rtm.start?token=#{token}").and_return(response)
+        allow(response).to receive(:body).and_return(body)
+      end
+
+      it 'makes a successful request' do
+        expect(api.start['ok']).to be_truthy
+      end
+    end
   end
 end

@@ -14,7 +14,9 @@ module RSlack
           raise ConnectionFailedError.new(e)
         end
 
-        check_response JSON.parse response.body
+        response = JSON.parse response.body
+        check_response response unless response['ok']
+        response
       end
 
       private

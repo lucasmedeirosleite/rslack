@@ -4,6 +4,8 @@ describe RSlack::Configuration do
 
   it { is_expected.to respond_to(:token) }
   it { is_expected.to respond_to(:token=) }
+  it { is_expected.to respond_to(:api_url) }
+  it { is_expected.to respond_to(:api_url=) }
   it { expect(subject.class).to respond_to(:configure) }
   it { expect(subject.class).to respond_to(:current) }
 
@@ -21,6 +23,7 @@ describe RSlack::Configuration do
       let(:configuration) do
         RSlack::Configuration.configure do |config|
           config.token = 'some-token'
+          config.api_url = 'some-url'
         end
       end
 
@@ -30,6 +33,10 @@ describe RSlack::Configuration do
 
       it 'must have a token configured' do
         expect(configuration.token).not_to be_nil
+      end
+
+      it 'must have a api_url configured' do
+        expect(configuration.api_url).not_to be_nil
       end
     end
   end

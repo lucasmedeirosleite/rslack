@@ -3,10 +3,10 @@ class RSlack::Configuration
     attr_reader :current
   end
 
-  attr_accessor :token
+  attr_accessor :token, :api_url
 
   # Public: Create a configuration instance with a configuration block
-  # and stores itself in its own class
+  #         and stores itself in its own class
   #
   # block - A required block that must set the token field with the token
   #         registered for your bot in your slack team bot section.
@@ -15,6 +15,7 @@ class RSlack::Configuration
   #
   #   RSlack::Configuration.configure do |config|
   #     config.token = ENV['SLACK_BOT_TOKEN']
+  #     config.api_url = ENV['SLACK_API_URL']
   #   end
   #
   # Returns the configuration that was created

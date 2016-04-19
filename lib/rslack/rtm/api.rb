@@ -7,8 +7,14 @@ module RSlack
       def start
         config = RSlack::Configuration.current
         url = "#{config.api_url}/rtm.start?token=#{config.token}"
-        response = JSON.parse RestClient.get(url).body
-        check_response response
+
+        begin
+          response = RestClient.get(url)
+        rescue => e
+          raise ConnectionFailedError.new(e)
+        end
+
+        check_response JSON.parse response.body
       end
 
       private

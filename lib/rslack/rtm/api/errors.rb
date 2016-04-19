@@ -8,7 +8,7 @@ module RSlack
       class InvalidAuthError < APIError; end
       class AccountInactiveError < APIError; end
       class InvalidCharsetError < APIError; end
-
+      class ConnectionFailedError < APIError; end
     end
   end
 end

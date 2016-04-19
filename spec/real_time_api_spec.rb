@@ -15,14 +15,17 @@ describe RSlack::RTM::API do
       let(:api_url) { 'http://some.url.com' }
       let(:configuration) { double }
 
+      before do
+        allow(RSlack::Configuration).to receive(:current).and_return(configuration)
+        allow(configuration).to receive(:token).and_return(token)
+        allow(configuration).to receive(:api_url).and_return(api_url)
+      end
+
       shared_examples 'an erronious request' do
         let(:body) { "{\"ok\":false,\"error\":\"#{event}\"}" }
         let(:response) { double }
 
         before do
-          allow(RSlack::Configuration).to receive(:current).and_return(configuration)
-          allow(configuration).to receive(:token).and_return(token)
-          allow(configuration).to receive(:api_url).and_return(api_url)
           expect(RestClient).to receive(:get).with("#{api_url}/rtm.start?token=#{token}").and_return(response)
           allow(response).to receive(:body).and_return(body)
         end
@@ -35,7 +38,15 @@ describe RSlack::RTM::API do
       end
 
       context 'when an http error occurred' do
-        xit 'warns that start call failed'
+        before do
+          allow(RestClient).to receive(:get).and_raise(RestClient::ResourceNotFound)
+        end
+
+        it 'warns that start call failed' do
+          expect {
+            api.start
+          }.to raise_error(RSlack::RTM::API::ConnectionFailedError)
+        end
       end
 
       context 'when migration_in_progress' do

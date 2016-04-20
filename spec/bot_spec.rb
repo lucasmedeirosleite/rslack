@@ -5,6 +5,7 @@ describe RSlack::RIBot do
 
   it { is_expected.to respond_to(:begin_listen!) }
   it { is_expected.to be_a(RSlack::RTM::API) }
+  it { is_expected.to be_a(RSlack::RTM::Live) }
 
   describe '#begin_listen!' do
     context "when not connect to Slack" do
@@ -26,7 +27,7 @@ describe RSlack::RIBot do
       end
 
       it 'retrieves web-socket-server url and connects to server' do
-        expect(RSlack::RTM::Live::WebSocketClient).to receive_message_chain(:new, :connect!)
+        expect(bot).to receive(:connect!)
         bot.begin_listen!
       end
     end

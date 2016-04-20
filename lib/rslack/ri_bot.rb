@@ -1,11 +1,11 @@
 module RSlack
   class RIBot
     include RTM::API
+    include RTM::Live
 
     def begin_listen!
-      socket_url = start['url']
-      RTM::Live::WebSocketClient.new(url: socket_url).connect! do |message, channel|
-        
+      connect!(url: start['url']) do |message, channel|
+
       end
     end
   end

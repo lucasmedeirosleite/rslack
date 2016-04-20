@@ -3,9 +3,12 @@ require 'spec_helper'
 describe RSlack::RIBot do
   subject(:bot) { RSlack::RIBot.new }
 
-  it { is_expected.to respond_to(:begin_listen!) }
   it { is_expected.to be_a(RSlack::Slack::API) }
   it { is_expected.to be_a(RSlack::Slack::Live) }
+
+  it { is_expected.to respond_to(:id) }
+  it { is_expected.to respond_to(:name) }
+  it { is_expected.to respond_to(:begin_listen!) }
 
   describe '#begin_listen!' do
     context "when not connect to Slack" do
@@ -20,17 +23,21 @@ describe RSlack::RIBot do
 
     context 'when connect to Slack' do
       let(:url) { 'wss://socket-url.com' }
-      let(:response) { { 'ok': true, 'url': url } }
+      let(:response)  { { 'ok' => true, 'url' => url } }
+      let(:user_data) { { 'ok' => true, 'user' => 'user_name', 'user_id' => 'user_id' }}
       let(:message) { double }
       let(:channel) { double }
 
       before do
         expect(bot).to receive(:start).and_return(response)
+        expect(bot).to receive(:auth).and_return(user_data)
       end
 
       it 'retrieves web-socket-server url and connects to server' do
         expect(bot).to receive(:connect!).with(anything).and_yield(message, channel)
         bot.begin_listen!
+        expect(bot.id).to eq 'user_id'
+        expect(bot.name).to eq 'user_name'
       end
     end
   end

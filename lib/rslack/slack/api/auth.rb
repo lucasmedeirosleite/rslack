@@ -1,10 +1,13 @@
 module RSlack
-  module RTM
+  module Slack
     module API
 
       module Auth
-      end
 
+        def auth
+          perform_call(url: 'auth.test')
+        end
+      end
     end
   end
 end

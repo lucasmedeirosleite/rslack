@@ -12,9 +12,25 @@ require_relative './api/rtm'
 module RSlack
   module Slack
     module API
+      include Auth
       include RTM
 
       private
+
+      def perform_call(method: :get, url:, &block)
+        config = RSlack::Configuration.current
+        url = "#{config.api_url}/#{url}?token=#{config.token}"
+
+        begin
+          response = RestClient.send(method, url)
+        rescue => e
+          raise ConnectionFailedError.new(e)
+        end
+
+        response = JSON.parse response.body
+        check_response response unless response['ok']
+        response
+      end
 
       def check_response(response)
         exception = case response['error']

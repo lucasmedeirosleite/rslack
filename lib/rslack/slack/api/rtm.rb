@@ -1,7 +1,6 @@
 module RSlack
   module Slack
     module API
-
       module RTM
 
         # Public: Abstraction for the Slack RTM API start method call
@@ -21,22 +20,9 @@ module RSlack
         #   AccountInactiveError => Error on Slack's RTM API: account_inactive
         #   InvalidCharsetError => Error on Slack's RTM API: invalid_charset
         def start
-          config = RSlack::Configuration.current
-          url = "#{config.api_url}/rtm.start?token=#{config.token}"
-
-          begin
-            response = RestClient.get(url)
-          rescue => e
-            raise ConnectionFailedError.new(e)
-          end
-
-          response = JSON.parse response.body
-          check_response response unless response['ok']
-          response
+          perform_call(url: 'rtm.start')
         end
-
       end
-
     end
   end
 end

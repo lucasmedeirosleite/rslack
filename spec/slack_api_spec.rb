@@ -8,8 +8,9 @@ describe RSlack::Slack::API do
   subject(:api) { Dummy.new }
 
   it { expect(api).to respond_to(:start) }
+  it { expect(api).to respond_to(:auth) }
 
-  describe '#start' do
+  shared_examples 'an api method' do
     let(:token) { 'a-token' }
     let(:api_url) { 'http://some.url.com' }
     let(:configuration) { double }
@@ -20,19 +21,19 @@ describe RSlack::Slack::API do
       allow(configuration).to receive(:api_url).and_return(api_url)
     end
 
-    context 'when RTM does not start properly' do
+    context 'when an error happens' do
       shared_examples 'an erronious request' do
         let(:body) { "{\"ok\":false,\"error\":\"#{event}\"}" }
         let(:response) { double }
 
         before do
-          expect(RestClient).to receive(:get).with("#{api_url}/rtm.start?token=#{token}").and_return(response)
+          expect(RestClient).to receive(:get).with("#{api_url}/#{url}?token=#{token}").and_return(response)
           allow(response).to receive(:body).and_return(body)
         end
 
         it 'warns with desired error' do
           expect{
-            api.start
+            api.send(method)
           }.to raise_error expected_error
         end
       end
@@ -44,7 +45,7 @@ describe RSlack::Slack::API do
 
         it 'warns that start call failed' do
           expect {
-            api.start
+            api.send(method)
           }.to raise_error(RSlack::Slack::ConnectionFailedError)
         end
       end
@@ -85,19 +86,32 @@ describe RSlack::Slack::API do
       end
     end
 
-    context 'when RTM starts property' do
-      let(:url) { "wss:\/\/my-socket-url.com" }
-      let(:body) { "{\"ok\":true,\"url\":\"#{url}\"}" }
+    context 'when request succeeds' do
+      let(:body) { "{ \"ok\":true }" }
       let(:response) { double }
 
       before do
-        expect(RestClient).to receive(:get).with("#{api_url}/rtm.start?token=#{token}").and_return(response)
+        expect(RestClient).to receive(:get).with("#{api_url}/#{url}?token=#{token}").and_return(response)
         allow(response).to receive(:body).and_return(body)
       end
 
       it 'makes a successful request' do
-        expect(api.start['ok']).to be_truthy
+        expect(api.send(method)['ok']).to be_truthy
       end
     end
+  end
+
+  describe '#start' do
+    let(:url) { 'rtm.start' }
+    let(:method) { :start }
+
+    it_behaves_like 'an api method'
+  end
+
+  describe '#auth' do
+    let(:url) { 'auth.test' }
+    let(:method) { :auth }
+
+    it_behaves_like 'an api method'
   end
 end

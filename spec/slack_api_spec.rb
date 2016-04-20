@@ -9,6 +9,7 @@ describe RSlack::Slack::API do
 
   it { expect(api).to respond_to(:start) }
   it { expect(api).to respond_to(:auth) }
+  it { expect(api).to respond_to(:send_message) }
 
   shared_examples 'an api method' do
     let(:token) { 'a-token' }
@@ -27,7 +28,7 @@ describe RSlack::Slack::API do
         let(:response) { double }
 
         before do
-          expect(RestClient).to receive(:get).with("#{api_url}/#{url}?token=#{token}").and_return(response)
+          expect(RestClient).to receive(http_method).with("#{api_url}/#{url}?token=#{token}").and_return(response)
           allow(response).to receive(:body).and_return(body)
         end
 
@@ -40,7 +41,7 @@ describe RSlack::Slack::API do
 
       context 'when an http error occurred' do
         before do
-          allow(RestClient).to receive(:get).and_raise(RestClient::ResourceNotFound)
+          allow(RestClient).to receive(http_method).and_raise(RestClient::ResourceNotFound)
         end
 
         it 'warns that start call failed' do
@@ -91,7 +92,7 @@ describe RSlack::Slack::API do
       let(:response) { double }
 
       before do
-        expect(RestClient).to receive(:get).with("#{api_url}/#{url}?token=#{token}").and_return(response)
+        expect(RestClient).to receive(http_method).with("#{api_url}/#{url}?token=#{token}").and_return(response)
         allow(response).to receive(:body).and_return(body)
       end
 
@@ -103,6 +104,7 @@ describe RSlack::Slack::API do
 
   describe '#start' do
     let(:url) { 'rtm.start' }
+    let(:http_method) { :get }
     let(:method) { :start }
 
     it_behaves_like 'an api method'
@@ -110,7 +112,16 @@ describe RSlack::Slack::API do
 
   describe '#auth' do
     let(:url) { 'auth.test' }
+    let(:http_method) { :get }
     let(:method) { :auth }
+
+    it_behaves_like 'an api method'
+  end
+
+  describe '#send_message' do
+    let(:url) { 'chat.postMessage' }
+    let(:http_method) { :post }
+    let(:method) { :send_message }
 
     it_behaves_like 'an api method'
   end

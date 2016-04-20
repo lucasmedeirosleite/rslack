@@ -1,5 +1,6 @@
 require 'rest-client'
 require_relative './api/auth'
+require_relative './api/chat'
 require_relative './api/rtm'
 
 # Public: Various RTM API methods.
@@ -13,6 +14,7 @@ module RSlack
   module Slack
     module API
       include Auth
+      include Chat
       include RTM
 
       private

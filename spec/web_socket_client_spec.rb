@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-describe RSlack::RTM::Live do
+describe RSlack::Slack::Live do
   class Dummy
-    include RSlack::RTM::Live
+    include RSlack::Slack::Live
   end
 
   subject(:client) { Dummy.new }
@@ -47,7 +47,7 @@ describe RSlack::RTM::Live do
         let(:url) { 'a-url' }
 
         it 'starts an eventmachine loop with faye configuration' do
-          expect(EventMachine).to receive(:run)
+          expect(EventMachine).to receive(:run).and_yield
           client.connect!(url: url) do
           end
         end

@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-describe RSlack::RTM::API do
+describe RSlack::Slack::API do
   class Dummy
-    include RSlack::RTM::API
+    include RSlack::Slack::API
   end
 
   subject(:api) { Dummy.new }
@@ -45,41 +45,41 @@ describe RSlack::RTM::API do
         it 'warns that start call failed' do
           expect {
             api.start
-          }.to raise_error(RSlack::RTM::API::ConnectionFailedError)
+          }.to raise_error(RSlack::Slack::ConnectionFailedError)
         end
       end
 
       context 'when migration_in_progress' do
         let(:event) { 'migration_in_progress' }
-        let(:expected_error) { RSlack::RTM::API::MigrationInProgressError }
+        let(:expected_error) { RSlack::Slack::MigrationInProgressError }
 
         it_behaves_like 'an erronious request'
       end
 
       context 'when not_authed' do
         let(:event) { 'not_authed' }
-        let(:expected_error) { RSlack::RTM::API::NotAuthenticatedError }
+        let(:expected_error) { RSlack::Slack::NotAuthenticatedError }
 
         it_behaves_like 'an erronious request'
       end
 
       context 'invalid_auth' do
         let(:event) { 'invalid_auth' }
-        let(:expected_error) { RSlack::RTM::API::InvalidAuthError }
+        let(:expected_error) { RSlack::Slack::InvalidAuthError }
 
         it_behaves_like 'an erronious request'
       end
 
       context 'account_inactive' do
         let(:event) { 'account_inactive' }
-        let(:expected_error) { RSlack::RTM::API::AccountInactiveError }
+        let(:expected_error) { RSlack::Slack::AccountInactiveError }
 
         it_behaves_like 'an erronious request'
       end
 
       context 'invalid_charset' do
         let(:event) { 'invalid_charset' }
-        let(:expected_error) { RSlack::RTM::API::InvalidCharsetError }
+        let(:expected_error) { RSlack::Slack::InvalidCharsetError }
 
         it_behaves_like 'an erronious request'
       end

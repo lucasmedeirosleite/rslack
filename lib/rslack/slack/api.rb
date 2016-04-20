@@ -22,9 +22,11 @@ module RSlack
       def perform_call(method: :get, url:, &block)
         config = RSlack::Configuration.current
         url = "#{config.api_url}/#{url}?token=#{config.token}"
+        params = {}
 
         begin
-          response = RestClient.send(method, url)
+          params = block.call() if block_given?
+          response = RestClient.send(method, url, params)
         rescue => e
           raise ConnectionFailedError.new(e)
         end

@@ -28,13 +28,13 @@ describe RSlack::Slack::API do
         let(:response) { double }
 
         before do
-          expect(RestClient).to receive(http_method).with("#{api_url}/#{url}?token=#{token}").and_return(response)
+          expect(RestClient).to receive(http_method).with("#{api_url}/#{url}?token=#{token}", params).and_return(response)
           allow(response).to receive(:body).and_return(body)
         end
 
         it 'warns with desired error' do
           expect{
-            api.send(method)
+            api_call
           }.to raise_error expected_error
         end
       end
@@ -46,7 +46,7 @@ describe RSlack::Slack::API do
 
         it 'warns that start call failed' do
           expect {
-            api.send(method)
+            api_call
           }.to raise_error(RSlack::Slack::ConnectionFailedError)
         end
       end
@@ -92,12 +92,12 @@ describe RSlack::Slack::API do
       let(:response) { double }
 
       before do
-        expect(RestClient).to receive(http_method).with("#{api_url}/#{url}?token=#{token}").and_return(response)
+        expect(RestClient).to receive(http_method).with("#{api_url}/#{url}?token=#{token}", params).and_return(response)
         allow(response).to receive(:body).and_return(body)
       end
 
       it 'makes a successful request' do
-        expect(api.send(method)['ok']).to be_truthy
+        expect(api_call['ok']).to be_truthy
       end
     end
   end
@@ -105,7 +105,8 @@ describe RSlack::Slack::API do
   describe '#start' do
     let(:url) { 'rtm.start' }
     let(:http_method) { :get }
-    let(:method) { :start }
+    let(:api_call) { api.start }
+    let(:params) { {} }
 
     it_behaves_like 'an api method'
   end
@@ -113,7 +114,8 @@ describe RSlack::Slack::API do
   describe '#auth' do
     let(:url) { 'auth.test' }
     let(:http_method) { :get }
-    let(:method) { :auth }
+    let(:api_call) { api.auth }
+    let(:params) { {} }
 
     it_behaves_like 'an api method'
   end
@@ -121,7 +123,8 @@ describe RSlack::Slack::API do
   describe '#send_message' do
     let(:url) { 'chat.postMessage' }
     let(:http_method) { :post }
-    let(:method) { :send_message }
+    let(:params) { { text: 'message', channel: 'channel' } }
+    let(:api_call) { api.send_message('message', on: 'channel') }
 
     it_behaves_like 'an api method'
   end

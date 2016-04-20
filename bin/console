@@ -3,5 +3,10 @@
 require 'bundler/setup'
 require 'rslack'
 
+RSlack::Configuration.configure do |config|
+  config.token = ENV['SLACK_BOT_TOKEN']
+  config.api_url = ENV['SLACK_API_URL']
+end
+
 require 'pry'
 Pry.start

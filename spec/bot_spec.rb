@@ -26,7 +26,7 @@ describe RSlack::RIBot do
       end
 
       it 'retrieves web-socket-server url and connects to server' do
-        expect(RSlack::RTM::Live::WebSocketClient).to receive(:connect!)
+        expect(RSlack::RTM::Live::WebSocketClient).to receive_message_chain(:new, :connect!)
         bot.begin_listen!
       end
     end

@@ -4,8 +4,8 @@ module RSlack
 
     def begin_listen!
       socket_url = start['url']
-      RTM::Live::WebSocketClient.connect!(url: socket_url) do |message, channel|
-
+      RTM::Live::WebSocketClient.new(url: socket_url).connect! do |message, channel|
+        
       end
     end
   end

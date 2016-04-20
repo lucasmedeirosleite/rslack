@@ -19,7 +19,7 @@ class RSlack::RISearcher
   # Returns a message saying that the documentation was not found or
   #         the documentation found for this definition
   def self.find_docs(definition)
-    output, error, status = Open3.capture3("ri #{definition}")
+    output, error, status = Open3.capture3("ri -f markdown --no-pager #{definition}")
     return error if output.empty?
     output
   end

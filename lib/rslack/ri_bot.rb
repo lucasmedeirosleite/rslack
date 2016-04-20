@@ -12,13 +12,17 @@ module RSlack
       @name = user_data['user']
 
       connect!(url: url) do |message, channel|
-        puts message
-        puts channel
+        send_found_documentation(message, channel)
       end
     end
 
-    def excluded_users
-      [ id ]
+    private
+
+    def send_found_documentation(message, channel)
+      documentation = message.split(' ').reduce('') do |acc, definition|
+        acc += ( RISearcher.find_docs(definition) + "\n\n" )
+      end
+      send_message(documentation, on: channel)
     end
   end
 end

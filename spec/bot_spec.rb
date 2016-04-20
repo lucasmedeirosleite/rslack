@@ -25,12 +25,13 @@ describe RSlack::RIBot do
       let(:url) { 'wss://socket-url.com' }
       let(:response)  { { 'ok' => true, 'url' => url } }
       let(:user_data) { { 'ok' => true, 'user' => 'user_name', 'user_id' => 'user_id' }}
-      let(:message) { double }
-      let(:channel) { double }
+      let(:message) { 'a message' }
+      let(:channel) { 'a channel' }
 
       before do
         expect(bot).to receive(:start).and_return(response)
         expect(bot).to receive(:auth).and_return(user_data)
+        expect(bot).to receive(:send_found_documentation).with(message, channel)
       end
 
       it 'retrieves web-socket-server url and connects to server' do

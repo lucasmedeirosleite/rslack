@@ -1,4 +1,4 @@
-# RSlack [![Build Status](https://travis-ci.org/lucasmedeirosleite/rlack.svg?branch=master)](https://travis-ci.org/lucasmedeirosleite/rslack)
+# RSlack
 
 A Slack Bot to retrieve ruby documentation through ri CLI tool.
 

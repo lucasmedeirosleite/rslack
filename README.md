@@ -1,38 +1,76 @@
 # RSlack
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/RSlack`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+A Slack Bot to retrieve ruby documentation through ri CLI tool.
 
 ## Installation
 
-Add this line to your application's Gemfile:
+Clone this repository:
 
-```ruby
-gem 'RSlack'
+```git
+git clone git@github.com:lucasmedeirosleite/rslack.git
 ```
 
-And then execute:
+Enter in its directory:
 
-    $ bundle
+```
+cd rslack
+```
 
-Or install it yourself as:
+Run:
 
-    $ gem install RSlack
+```
+bin/setup
+```
+
+## In case ri documentation is not installed
+
+If you are using [RVM](http://www.rvm.io) make sure you run this command:
+
+```
+rvm docs generate-ri
+```
+
+If not try this: 
+
+```
+gem install rdoc-data && rdoc-data --install
+``` 
+
+## Running tests
+
+```
+bin/test
+```
+
+## Playing with it using the console
+
+Run:
+
+```
+SLACK_API_URL=https://slack.com/api SLACK_BOT_TOKEN=your-bot-token bin/console
+```
+
+## Starting your bot
+
+```
+SLACK_API_URL=https://slack.com/api SLACK_BOT_TOKEN=your-bot-token bin/run
+```
 
 ## Usage
 
-TODO: Write usage instructions here
+In slack (web, desktop app or mobile app) mention your bot and ask for ruby documentation.
 
-## Development
+Supose your bot name is rubymaster and you start our bot app with rubymaster's token.
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+The interaction will be like this:
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+* ```@rubymaster: Array#first```
+* ```@rubymaster: Hash Enumerable```
+
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/RSlack. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
+Bug reports and pull requests are welcome on GitHub at https://github.com/lucasmedeirosleite/rslack. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
 
 
 ## License

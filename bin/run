@@ -1,7 +1,6 @@
 #!/usr/bin/env ruby
 
 require 'bundler/setup'
-require 'pry'
 require 'rslack'
 
 RSlack::Configuration.configure do |config|

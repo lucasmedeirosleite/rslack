@@ -56,6 +56,14 @@ SLACK_API_URL=https://slack.com/api SLACK_BOT_TOKEN=your-bot-token bin/console
 SLACK_API_URL=https://slack.com/api SLACK_BOT_TOKEN=your-bot-token bin/run
 ```
 
+## Problems you may face:
+
+If you can't run the executable files inside bin directory in your terminal try:
+
+```
+chmod +x bin/{file-name}
+```
+
 ## Usage
 
 In slack (web, desktop app or mobile app) mention your bot and ask for ruby documentation.
@@ -66,7 +74,6 @@ The interaction will be like this:
 
 * ```@rubymaster: Array#first```
 * ```@rubymaster: Hash Enumerable```
-
 
 ## Contributing
 

@@ -8,7 +8,7 @@ describe RSlack::RISearcher do
   describe '.find_docs' do
     shared_examples 'a search that does not find anything' do
       it 'does not find the docs' do
-        expect(searcher.find_docs(definition)).to eq "Nothing known about .#{definition}\n"
+        expect(searcher.find_docs(definition)).to be_empty
       end
     end
 

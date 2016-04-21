@@ -1,4 +1,4 @@
-# RSlack
+# RSlack [![Build Status](https://travis-ci.org/lucasmedeirosleite/rlack.svg?branch=master)](https://travis-ci.org/lucasmedeirosleite/rslack)
 
 A Slack Bot to retrieve ruby documentation through ri CLI tool.
 
@@ -30,11 +30,11 @@ If you are using [RVM](http://www.rvm.io) make sure you run this command:
 rvm docs generate-ri
 ```
 
-If not try this: 
+If not try this:
 
 ```
 gem install rdoc-data && rdoc-data --install
-``` 
+```
 
 ## Running tests
 
